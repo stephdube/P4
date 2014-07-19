@@ -21,12 +21,12 @@ Route::get('sql', function(){
 });
 
 Route::get('albums', function(){
-	$albums = file_get_contents("C:\MAMP\htdocs\p4\app\database\MAAlbums.csv");
+	$albums = file_get_contents("C:\MAAlbums.csv");
 	$rows = explode("\r\n", $albums);
 
 	$row = explode(",", $rows[1]);
 
-	for ($i = 0; $i<count($rows);$i++){
+	for($i=173; $i<count($rows); $i++){
 		$album = explode(",", $rows[$i]);
 		print_r($album);
 		echo "<br>";
