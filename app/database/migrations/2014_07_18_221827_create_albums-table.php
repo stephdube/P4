@@ -13,12 +13,7 @@ class CreateAlbumsTable extends Migration {
 	public function up()
 	{
 		Schema::create('albums', function($table){
-			// Unique id/Primary key for each album row
-			$table->increments('id');
-
-			// Note when each row is created/updated
-			$table->timestamps();
-
+			$table->integer('id');
 			$table->string('title');
 			$table->integer('band_id');
 			$table->string('type');
