@@ -13,7 +13,7 @@ class CreateBandsTable extends Migration {
 	public function up()
 	{
 		Schema::create('bands', function($table){
-			$table->integer('id');
+			$table->bigInteger('id');
 			$table->string('name');
 			$table->string('genre');
 			$table->string('country');

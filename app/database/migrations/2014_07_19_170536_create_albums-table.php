@@ -15,7 +15,7 @@ class CreateAlbumsTable extends Migration {
 		Schema::create('albums', function($table){
 			$table->integer('id');
 			$table->string('title');
-			$table->integer('band_id');
+			$table->bigInteger('band_id');
 			$table->string('type');
 			$table->string('label');
 			$table->date('release_date');
