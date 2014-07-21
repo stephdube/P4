@@ -15,7 +15,26 @@ Route::get('/signup', function()
 	return View::make('signup');
 });
 
-Route::get('sql', function(){
-	$results = DB::select('SHOW DATABASES;');
-	return Pre::render($results);
+Route::get('/rate', function()
+{
+	if(Input::get('album_query')){
+		$album = Input::get('album_query');
+		return View::make('rate')
+		->with('album',$album);
+	}
+	else{
+		return View::make('search');
+	};
+});
+
+Route::post('/rate', function()
+{
+	if(Input::get('album_query')){
+		$album = Input::get('album_query');
+		return View::make('rate')
+		->with('album',$album);
+	}
+	else{
+		return View::make('search');
+	};
 });
