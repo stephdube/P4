@@ -17,14 +17,7 @@ Route::get('/signup', function()
 
 Route::get('/search', function()
 {
-	if(Input::get('album_query')){
-		$album = Input::get('album_query');
-		return View::make('rate')
-		->with('album',$album);
-	}
-	else{
-		return View::make('search');
-	};
+	return View::make('search');
 });
 
 Route::post('/search', function()
