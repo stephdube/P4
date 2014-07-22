@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>CS171 Homework 1</title>
+  <style type="text/css">
+
+    h1 { text-align: center;}
+
+    table, caption, th, tr, td{
+      border: 1px solid black;
+      border-collapse:collapse;
+      margin:0 auto;
+      color: #000000;
+      text-align:center;}
+
+    td {font-size:small;}
+
+    caption{
+      background-color:#CC3300;
+      font-weight: bold;
+      font-size: large;
+     letter-spacing:3px;}
+
+    th { background-color:#FF9933;}
+
+    tr:nth-child(odd) { background-color:#FFE14d;}
+
+    tr:nth-child(even){ background-color: #FFD500; }
+
+    .click_to_ascend {cursor:n-resize;}
+
+    .click_to_descend {cursor:s-resize;}
+   
+   #Chart:hover { cursor:s-resize;}
+  </style>
+</head>
+
+<body>
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script>
+    d3.text("unemp_states_us_nov_2013.tsv", function(error, data){
+
+        // add header before table
+        var title = d3.selectAll("body").append("h1")
+          .text("Unemployment Rates for States");
+
+        // add table
+        var table = d3.select("body").append("table");
+
+        // append caption to table
+        var caption = d3.select("table")
+          .append("caption")
+          .html("Unemployment Rates for States <br>Monthly Rankings <br>Seasonally Adjusted <br />Dec. 2013");
+
+        // parse data
+        var parsedData = d3.tsv.parseRows(data);
+        // separate header columns from rest of data
+        var snipped = parsedData.shift();
+
+        // add header row to table
+        var thead = table.append("thead");
+
+        var firstrow = thead.append("tr");
+        // add header column cells
+        var firstcells = firstrow.selectAll("th")
+        // use first row from original data only
+          .data(snipped)
+          .enter()
+          .append("th")
+          .text(function(d) { return d; })
+          .attr("id", function(d){return d}); // give each header an ID
+
+        firstrow.append("th").text("Chart").attr("id", "Chart");
+        
+        tbody = table.append("tbody"); // add table body
+
+        var rows = tbody.selectAll("tr") // add tale body rows
+          .data(parsedData)
+          .enter()
+          .append("tr")
+          .sort(function(a, b){return d3.ascending(a[2], b[2])}) // sort data by Rate on load
+
+          // rows will be highlighted when moused over
+          .on('mouseover', function()
+            {d3.select(this).style('background-color', '#BCE9FF');})
+          .on('mouseout', function(){
+            d3.select(this).style("background-color", "");});
+
+          // add cells with data
+          var cells = rows.selectAll("td")
+          .data(function(row){
+            return d3.range(Object.keys(row).length).map(function(column, i){
+              return row[Object.keys(row)[i]];
+              });
+            })
+          .enter()
+          .append("td")
+          .text(function(d){ if (!isNaN(d)) { return parseFloat(d);} else {return d}})
+          .attr('class', function(d,i){ return "column" + i; }) // assign class to cells per column index
+          
+          // higlight first two columns when moused over (leave Rate column to show color value)
+          d3.selectAll("td.column0")
+            .on("mouseover", function() {
+              d3.selectAll("td.column0").style('background-color', "#BCE9FF")})
+            .on("mouseout", function(d){d3.selectAll("td.column0")
+              .style('background-color', "");});
+
+
+          d3.selectAll("td.column1")
+            .on("mouseover", function(d){d3.selectAll("td.column1")
+              .style('background-color', "#BCE9FF")})
+            .on("mouseout", function(d){d3.selectAll("td.column1")
+              .style('background-color', "");});
+
+          // remember if header column has been clicked and class accordingly
+          var Rate_Ascends = true;
+          var State_Ascends = false;
+          d3.select("#State").attr("class","click_to_descend");
+          d3.select("#Rate").attr("class","click_to_ascend");
+
+          // sort rows by state when state col head clicked
+          d3.selectAll("tr").select("#State")
+          .on("click", function(){
+            if (State_Ascends == false){
+                tbody.selectAll("tr").sort(function(a, b) {
+                State_Ascends = true;
+                d3.select("#State").attr("class","click_to_descend");
+                return d3.ascending(a[1], b[1]); 
+                })
+              }
+            else {
+              tbody.selectAll("tr").sort(function(a, b){
+              State_Ascends = false;
+              d3.select("#State").attr("class", "click_to_ascend");
+              return d3.descending(a[1], b[1]);})
+              }
+          });
+
+          // sort rows by rate when rate column head clicked
+          d3.selectAll("tr").select("#Rate")
+            .on("click", function(){ 
+              if (Rate_Ascends == false){
+                tbody.selectAll("tr").sort(function(a, b){
+                Rate_Ascends = true;
+                d3.select("#Rate").attr("class", "click_to_descend");
+                return d3.ascending(a[2], b[2]) || d3.ascending(a[1], b[1]);
+                }) 
+              }
+              else {
+                tbody.selectAll("tr").sort(function(a, b){ 
+                  Rate_Ascends = false;
+                  d3.select("#Rate").attr("class", "click_to_ascend");
+                  return d3.descending(a[2], b[2]) || d3.descending(a[1], b[1]);
+                  })
+              }});
+
+          // also sort rows by rate when chart column head clicked
+          d3.selectAll("tr").select("#Chart")
+            .on("click", function(){
+              if (Rate_Ascends == false)
+                {tbody.selectAll("tr").sort(function(a, b)
+                  {Rate_Ascends = true;
+                  d3.select("#Chart").attr("class", "click_to_descend");
+                  return d3.ascending(a[2], b[2]) || d3.ascending(a[1], b[1]);
+                })}
+              else{
+                tbody.selectAll("tr").sort(function(a, b)
+                {Rate_Ascends = false; 
+                  d3.select("#Rate").attr("class", "click_to_ascend");
+                return d3.descending(a[2], b[2]) || d3.descending(a[1], b[1]);})}
+              }
+            );
+
+            // color the rate column to reflect cells' values
+            var color_scale = d3.scale.linear()
+                .domain([d3.min(parsedData, function(d) { return d[0]; }), 
+                  d3.max(parsedData, function(d) { return d[0]; })])
+                .interpolate(d3.interpolateRgb)
+                .range(["orangered", "silver"]);
+
+
+              d3.selectAll("td.column2")
+                .style("background-color", function(d){
+                  return color_scale(d)}
+                );
+
+              // add bar chart column and bars
+              rows.insert("td").append("svg")
+               .attr("width", 255)
+               .attr("height", 15)
+               .append("rect")
+               .style("fill", "slategray")
+               .attr("width", function(d) { 
+                return parseFloat(d[0]) * 5})
+               .attr("height", 20);
+          });
+  </script>
+</body>
+</html>

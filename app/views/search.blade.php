@@ -2,11 +2,10 @@
 
 @section('content')
 
-<form method="POST" action="/rate">
+<form method="POST" action="/search">
 Search: <input type="text" name="album_query"><br>
 
-
-<input type="submit" value="Search"></br>
+<input type="submit" value="Quick Search"></br>
 </form>
 
 

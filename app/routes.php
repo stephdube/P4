@@ -15,7 +15,7 @@ Route::get('/signup', function()
 	return View::make('signup');
 });
 
-Route::get('/rate', function()
+Route::get('/search', function()
 {
 	if(Input::get('album_query')){
 		$album = Input::get('album_query');
@@ -27,7 +27,7 @@ Route::get('/rate', function()
 	};
 });
 
-Route::post('/rate', function()
+Route::post('/search', function()
 {
 	if(Input::get('album_query')){
 		$album = Input::get('album_query');
@@ -37,4 +37,11 @@ Route::post('/rate', function()
 	else{
 		return View::make('search');
 	};
+});
+
+// Once someone selects an album, go to the album's rating page to rate it..
+Route::get('/album', function()
+{
+	$album_id = Input::get('id');
+	echo $album_id;
 });
