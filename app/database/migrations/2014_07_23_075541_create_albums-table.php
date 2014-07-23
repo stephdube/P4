@@ -13,12 +13,13 @@ class CreateAlbumsTable extends Migration {
 	public function up()
 	{
 		Schema::create('albums', function($table){
-			$table->integer('id');
-			$table->string('title');
+			$table->integer('album_id');
+			$table->string('album_title');
 			$table->bigInteger('band_id');
-			$table->string('type');
+			$table->string('release_type');
 			$table->string('label');
 			$table->date('release_date');
+			$table->primary(array('album_id', 'band_id'));
 		});
 	}
 

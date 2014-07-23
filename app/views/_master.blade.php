@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<title>@yield('title', 'Metal Recommendations')</title>
-	<link rel="stylesheet" href="p3style.css" type="text/css">
+	<link rel="stylesheet" href="p4style.css" type="text/css">
 </head>
 
 <body>

@@ -23,7 +23,7 @@ return array(
 		'mysql' => array(
 			'driver'    => 'mysql',
 			'host'      => 'localhost',
-			'database'  => 'metal',
+			'database'  => 'metal_recommendations',
 			'username'  => 'root',
 			'password'  => 'root',
 			'charset'   => 'utf8',

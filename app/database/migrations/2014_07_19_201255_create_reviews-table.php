@@ -18,6 +18,7 @@ class CreateReviewsTable extends Migration {
 			$table->string('reviewer');
 			$table->integer('rating');
 			$table->date('review_date');
+			$table->primary('review_id');
 		});
 	}
 
